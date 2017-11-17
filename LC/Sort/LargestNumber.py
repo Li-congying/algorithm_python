@@ -16,6 +16,11 @@ class Solution:
         :param nums: List
         :return: string
         '''
+        '''
+        nums = [str(x) for x in nums]
+        nums.sort(cmp= lambda x,y: cmp(x+y,y+x),reverse=True)
+        return ''.join(nums).lstrip('0') or '0'
+        '''
         def comp(a, b):
             if int(str(a) + str(b)) < int(str(b) + str(a)):
                 return 1
