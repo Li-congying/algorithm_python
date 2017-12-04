@@ -25,6 +25,7 @@ The input is always valid. You may assume that evaluating the queries will resul
 
 [6.00000,3.00000,-1.00000,1.00000,-1.00000]
 '''
+import collections
 class Solution(object):
     def calcEquation(self, equations, values, queries):
         """
@@ -38,37 +39,49 @@ class Solution(object):
             if equations[i][0] not in graph:
                 graph[equations[i][0]] = {}
             graph[equations[i][0]][equations[i][1]] = values[i]
-            # if equations[i][1] not in graph:
-            #     graph[equations[i][1]] = {}
-            # graph[equations[i][1]][equations[i][0]] = 1 / values[i]
+            if equations[i][1] not in graph:
+                graph[equations[i][1]] = {}
+            graph[equations[i][1]][equations[i][0]] = 1 / values[i]
 
 
-        def helper(dividend, divisor, graph, cur):
+        def helper(dividend, divisor, graph, cur, visited):
             #print dividend, divisor, cur
-            if dividend not in graph:
+            if dividend not in graph or dividend in visited:
                 return False
+            if dividend == divisor:
+                return 1.0
+            visited[dividend] = 1
             if divisor in graph[dividend]:
                 return cur * graph[dividend][divisor]
             for nxt in graph[dividend]:
-                ret = helper(nxt, divisor, graph, graph[dividend][nxt])
+                ret = helper(nxt, divisor, graph, cur*graph[dividend][nxt], visited)
                 if ret:
                     return ret
         result = []
         for dividend , divisor in queries:
-            ret = helper(dividend, divisor, graph, 1)
+            ret = helper(dividend, divisor, graph, 1, {})
             if not ret:
-                ret = helper(divisor, dividend, graph, 1)
-                if ret:
-                    result.append(1/ret)
-                else:
-                    result.append(-0.1)
+               result.append(-1.0)
             else:
                 result.append(ret)
 
         return result
 
+    def solution(self, equations, values, queries):
+        quot = collections.defaultdict(dict)
+        for (num, den), val in zip(equations, values):
+            quot[num][num] = quot[den][den] = 1.0
+            quot[num][den] = val
+            quot[den][num] = 1 / val
+        for k in quot:
+            for i in quot[k]:
+                for j in quot[k]:
+                    quot[i][j] = quot[i][k] * quot[k][j]
+        return [quot[num].get(den, -1.0) for num, den in queries]
 
 
 obj = Solution()
-print obj.calcEquation([ ["a","b"],["b","c"] ], [2.0,3.0], [ ["a","c"],["b","a"],["a","e"],["a","a"],["x","x"] ])
+print obj.calcEquation([["a","e"],["b","e"],["a", "c"], ["a", "b"]],
+[4.0,3.0, 1.0, 10.0],
+[["a","b"],["b","c"],["x","x"]])
 

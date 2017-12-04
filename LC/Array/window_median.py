@@ -37,7 +37,7 @@ class Solution(object):
         :rtype: List[float]
         """
         def insetToHeap(num, max_heap, min_heap):
-            if not max_heap or num < -max_heap[0] :
+            if not min_heap or (min_heap and num < min_heap[0]) :
                 heappush(max_heap, -num)
                 if len(min_heap) < len(max_heap) - 1:
                     heappush(min_heap, -heappop(max_heap))
@@ -53,33 +53,41 @@ class Solution(object):
 
         result = []
         for i in range(k, len(nums) + 1):
-            print max_heap, min_heap
+            print 'start', [-key for key in max_heap], min_heap
             if k % 2 == 1:
-                result.append(min_heap[0] if len(min_heap) > len(max_heap) else -max_heap[0])
+                result.append(min_heap[0] * 1.0 if len(min_heap) > len(max_heap) else max_heap[0] * -1.0)
             else:
                 result.append((min_heap[0] - max_heap[0])/2.0)
             if i < len(nums):
-                print i-k, nums[i-k]
+                print 'insert', nums[i]
                 if nums[i-k] <= - max_heap[0]:
                     for j in range(len(max_heap)):
                         if nums[i-k] == -max_heap[j]:
                             break
                     del(max_heap[j])
+                    heapify(max_heap)
                 else:
                     for j in range(len(min_heap)):
                         if nums[i-k] == min_heap[j]:
                             break
                     del(min_heap[j])
+                    heapify(min_heap)
+
                 insetToHeap(nums[i], max_heap, min_heap)
-                print max_heap, min_heap
+                print 'end', [-key for key in max_heap], min_heap
 
         return result
 
 
 obj = Solution()
-print obj.medianSlidingWindow([1,3,-1,-3,5,3,6,7], 3)
-
+print obj.medianSlidingWindow([1,2,3,4,2,3,1,4,2], 3)
+#
+# '''
+# [7,0,3,9,9,9,1,7,2,3]
+# 6
+# '''
 #[1.00000,-1.00000,-1.00000,3.00000,5.00000,6.00000]
+
 
 
 
