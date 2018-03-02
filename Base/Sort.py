@@ -87,11 +87,12 @@ class Solution(object):
         for i in range(len(nums)):
             count[nums[i]] = count.get(nums[i], 0) + 1
 
+
         keys = count.keys()
         for i in range(1, len(keys)):
             print keys[i], keys[i-1]
             count[keys[i]] += count.get(keys[i-1], 0)
-        #print count
+        print count
         out_nums = [0 for i in range(len(nums))]
         for i in range(len(nums))[::-1]:
             pos = count[nums[i]]-1
@@ -111,5 +112,5 @@ s = Solution()
 #print s.quickSort([3,1,4,2,5,8,7,0], 0, 7)
 #print s.heap_sort([6,1,4,2,3,5,0])
 
-print s.merge_sort([2,5,1,3,4,6,10], 0, 6)
-# print s.count_sort([7,1,3,4,2,5,10])
+# print s.merge_sort([2,5,1,3,4,6,10], 0, 6)
+print s.count_sort([7,1,3,4,2,5,10])

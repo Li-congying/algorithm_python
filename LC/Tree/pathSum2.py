@@ -32,6 +32,7 @@ class Solution(object):
         :type sum: int
         :rtype: List[List[int]]
         """
+
         if not root:
             return []
         self.result = []
@@ -50,6 +51,8 @@ class Solution(object):
 
         helper(root, 0, sum, [], self.result)
         return self.result
+
+
 
 
 node_1 = TreeNode(1)

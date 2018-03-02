@@ -25,6 +25,7 @@ The input is always valid. You may assume that evaluating the queries will resul
 
 [6.00000,3.00000,-1.00000,1.00000,-1.00000]
 '''
+
 import collections
 class Solution(object):
     def calcEquation(self, equations, values, queries):
@@ -69,6 +70,7 @@ class Solution(object):
 
     def solution(self, equations, values, queries):
         quot = collections.defaultdict(dict)
+        print (quot)
         for (num, den), val in zip(equations, values):
             quot[num][num] = quot[den][den] = 1.0
             quot[num][den] = val
@@ -81,7 +83,6 @@ class Solution(object):
 
 
 obj = Solution()
-print obj.calcEquation([["a","e"],["b","e"],["a", "c"], ["a", "b"]],
-[4.0,3.0, 1.0, 10.0],
-[["a","b"],["b","c"],["x","x"]])
 
+aa = obj.solution([["a","e"],["b","e"],["a", "c"], ["a", "b"]],[4.0,3.0, 1.0, 10.0],[["a","b"],["b","c"],["x","x"]])
+print (aa)

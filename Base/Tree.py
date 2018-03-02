@@ -129,6 +129,59 @@ class Solution(object):
         return result
 
 
+    def pre_order_2(self, root):
+        if not root:
+            return root
+
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            print node.val
+            if node.right:
+                stack.append(node.right)
+            if node.left:
+                stack.append(node.left)
+
+    def inner_order_2(self, root):
+        if not root:
+            return None
+        stack = []
+        p = root
+        while p or stack:
+            if p:
+                stack.append(p)
+                p = p.left
+            else:
+                node = stack.pop()
+                print node.val
+                p = node.right
+
+    def post_order_2(self, root):
+        if not root:
+            return root
+        p = (root, 0)
+        stack_node = []
+        while p or stack_node:
+            if p:
+                stack_node.append(p)
+                if p[0].left:
+                    p = (p[0].left, 0)
+                else:
+                    p = None
+            else:
+                node = stack_node.pop()
+                if node[1] == 1:
+                    print node[0].val
+                else:
+                    stack_node.append((node[0], 1))
+                    if node[0].right:
+                        p = (node[0].right, 0)
+                    else:
+                        p = None
+
+
+
+
 
 
 node_1 = TreeNode(1)
@@ -141,16 +194,12 @@ node_6 = TreeNode(6)
 node_1.left = node_2
 node_1.right = node_3
 node_2.right = node_4
-node_3.left = node_5
 node_2.left = node_6
+node_3.left = node_5
+
 
 node_7 = None
 
 s = Solution()
-#print s.preOrder_recursive(node_3)
-#print s.preOrder(node_3)
-# print s.innerOrder_recursive(node_1)
-print s.innerOrder(node_1)
-# print s.postOrder_recursive(node_1)
-# print s.postOrder(node_1)
-#print s.layerOrder(node_1)
+#s.pre_order_2(node_1)
+s.post_order_2(node_1)

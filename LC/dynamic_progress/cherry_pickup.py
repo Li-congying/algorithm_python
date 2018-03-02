@@ -33,56 +33,61 @@ class Solution(object):
         :type grid: List[List[int]]
         :rtype: int
         """
-        def getPath(grid):
-            dp = [[-1] * len(i) for i in grid]
-            dp[0][0] = grid[0][0]
-            for i in range(len(grid)):
-                for j in range(len(grid[i])):
-                    if grid[i][j] != -1 :
-                        if i == 0 :
-                            if j >= 1:
-                                if grid[i][j-1] != -1:
-                                    dp[i][j] = dp[i][j-1] + grid[i][j]
-                        else:
-                            if j >= 1:
-                                if grid[i-1][j] != -1 or grid[i][j-1] != -1:
-                                    dp[i][j] = grid[i][j] +  max(dp[i][j-1], dp[i-1][j])
-                            else:
-                                if grid[i-1][j] != -1:
-                                    dp[i][j] = grid[i][j] + dp[i-1][j]
 
-            return dp
-
-        dp = getPath(grid)
-
-        if dp[-1][-1] == -1:
-            return 0
-        #step_1 = dp[-1][-1]
-        i = j = len(dp)-1
-        while i >= 0 and j >= 0:
-            grid[i][j] = 0
-            if i == 0:
-                j -= 1
-            elif j == 0:
-                i -= 1
-            else:
-                if dp[i][j-1] >= dp[i-1][j]:
-                    j -= 1
-                else:
-                    i -= 1
-
-        #print grid
-        grid = grid[::-1]
+        dp = [[-1] * len(i) for i in grid]
+        dp[0][0] = grid[0][0]
         for i in range(len(grid)):
-            grid[i] = grid[i][::-1]
+            for j in range(len(grid[i])):
+                if grid[i][j] != -1 :
+                    if i == 0 :
+                        if j >= 1:
+                            if grid[i][j-1] != -1:
+                                dp[i][j] = dp[i][j-1] + grid[i][j]
+                    else:
+                        if i == 2 and j == 6:
+                            print dp[i-1][j]
+                        if j >= 1 and (dp[i-1][j] != -1 or dp[i][j-1] != -1):
+                            if grid[i-1][j] == -1:
+                                dp[i][j] = grid[i][j] + dp[i][j-1]
+                            elif grid[i][j-1] == -1:
+                                dp[i][j] = grid[i][j] + dp[i-1][j]
+                            else:
+                                ii = i
+                                jj = j
+                                while ii >=0 and jj >=0 and  dp[ii-1][jj-1] == -1:
+                                    ii -= 1
+                                    jj -= 1
 
-        dp_2 = getPath(grid)
-        return dp[-1][-1] + dp_2[-1][-1]
+                                dp[i][j] = grid[i][j] + max(0, dp[i-1][j]) + max(0, dp[i][j-1]) - max(0, dp[ii-1][jj-1])
+                        if i == 2 and j == 6:
+                            print dp[i-1][j], dp[i][j]
+                        else:
+                            if grid[i-1][j] != -1:
+                                dp[i][j] = grid[i][j] + dp[i-1][j]
+
+        for l in dp:
+            print l
+
+
+        return dp[-1][-1] if dp[-1][-1] != -1 else 0
 
 
 
-grid = [[1,1,-1],[1,1,1],[-1,1,1]]
 
+
+grid = [[1,1,1,1,0,0,0],
+        [0,0,0,1,0,0,0],
+        [0,0,0,1,0,0,1],
+        [1,0,0,1,0,0,0],
+        [0,0,0,1,0,0,0],
+        [0,0,0,1,0,0,0],
+        [0,0,0,1,1,1,1]]
+
+# grid = [[1,-1,-1,-1,-1],
+#         [1,0,1,-1,-1],
+#         [0,-1,1,0,1],
+#         [1,0,1,1,0],
+#         [-1,-1,-1,1,1]]
 
 
 obj = Solution()

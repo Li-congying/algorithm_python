@@ -31,8 +31,18 @@ class Solution(object):
         if i == len(str_) - 1:
             return N
 
-        # if str_[i] == '1':
-        #     r_str = '9' * (len(str_) - 1)
-        # else:
-        #     r_str = str_[:i+1] + '9' * (len(str_) - i)
+        if str_[i] == '1':
+            r_str = '9' * (len(str_) - 1)
+        else:
+            while i >= 0:
+                if str_[i] > str_[i-1]:
+                    break
+                i -= 1
+            i = max(i, 0)
+            r_str = str_[:i] + str(int(str_[i])-1) + (len(str_) - i -1) * '9'
+
+        return int(r_str)
+
+obj = Solution()
+print obj.monotoneIncreasingDigits(768887)
 

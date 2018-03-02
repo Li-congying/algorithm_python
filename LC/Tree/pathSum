@@ -1,0 +1,74 @@
+'''
+Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that 
+adding up all the values along the path equals the given sum.
+
+For example:
+Given the below binary tree and sum = 22,
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \      \
+        7    2      1
+return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
+'''
+# Definition for a binary tree node.
+class TreeNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution(object):
+    def hasPathSum(self, root, sum):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: bool
+        """
+        '''
+              if not root:
+                  return False
+
+              if not root.left and not root.right:
+                  return sum == root.val
+              elif not root.left:
+                  return self.hasPathSum(root.right, sum-root.val)
+              elif not root.right:
+                  return self.hasPathSum(root.left, sum-root.val)
+
+              return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum-root.val)
+        '''
+
+        if not root:
+            return False
+
+        def helper(node, cur_sum, target):
+            if not node:
+                return False
+            if cur_sum + node.val > target:
+                return False
+            if cur_sum + node.val == target:
+                return True
+            cur_sum += node.val
+            left_rst = helper(node.left, cur_sum, target)
+            if not left_rst:
+                right_rst = helper(node.right, cur_sum, target)
+                return right_rst
+            else:
+                return True
+
+        return helper(root, 0, sum)
+
+
+root = TreeNode(1)
+root.left = TreeNode(3)
+root.right = TreeNode(5)
+root.left.right = TreeNode(4)
+
+obj = Solution()
+print obj.hasPathSum(root, 6)
+
+
+
